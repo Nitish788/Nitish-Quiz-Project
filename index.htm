@@ -6,15 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quiz App</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Roboto+Slab&display=swap"
+      rel="stylesheet"
+    />
     <script defer src="script.js"></script>
   </head>
   <body>
-    <section class="front">
-      <h2>General Instruction</h2>
-    </section>
-    <section id="section-1 hidden">
-      <!-- <h3 class="question question-1" data-ans1="1">CSS stands for</h3>
-      <div class="options__list">
+    <div class="start">
+      <section class="front">
+        <h2 class="general_instruction">General Instruction</h2>
+        <ol>
+          <li>All questions are compulsory.</li>
+          <li>Total No of Question: 10</li>
+          <li>Time alloted : <mark>04</mark> Minutes.</li>
+          <li>Marks for each correct answer: 1 mark.</li>
+          <li>Penalty for each incorrect answer: 0 mark.</li>
+          <li>
+            To complete the test, click on Submit Test button given on the
+            bottom of the test page.
+          </li>
+          <li>Test will be submitted automatically if time got expired.</li>
+          <li>DO NOT refresh the page.</li>
+        </ol>
+        <button type="button" class="startquiz">Start Quiz</button>
+      </section>
+    </div>
+    <section class="main_section hidden">
+      <section id="section-1" class="quiz">
+        <!-- <h3 class="question question-1" data-ans1="1">CSS stands for</h3>
+          <div class="options__list">
         <div class="option">
           <span>1</span>
           <p class="answer" data-opt="1">cascading style sheet</p>
@@ -29,8 +50,47 @@
           <p class="answer" data-opt="4">cascading style sleep</p>
         </div>
       </div> -->
-    </section>
+      </section>
+      <div class="scorecard">
+        <div class="timer"></div>
+        <div class="border">
+          <div class="head"><h3>Question Analysis</h3></div>
 
-    <div class="score"></div>
+          <div>
+            <button type="button" class="ques_num">1</button>
+            <button type="button" class="ques_num">2</button>
+            <button type="button" class="ques_num">3</button>
+            <button type="button" class="ques_num">4</button>
+            <button type="button" class="ques_num">5</button>
+          </div>
+          <div>
+            <button type="button" class="ques_num">6</button>
+            <button type="button" class="ques_num">7</button>
+            <button type="button" class="ques_num">8</button>
+            <button type="button" class="ques_num">9</button>
+            <button type="button" class="ques_num">10</button>
+          </div>
+        </div>
+        <div class="submit">
+          <button type="button" id="submit">Submit Test</button>
+        </div>
+      </div>
+    </section>
+    <section class="report hidden">
+      <h1 class="card">Report 🏆 Card</h1>
+      <div class="message"></div>
+      <div class="result">
+        <div class="total">
+          <div class="score">00</div>
+          Score
+        </div>
+        <div class="total">
+          <div class="max">10</div>
+          Out of
+        </div>
+      </div>
+
+      <button type="button" class="review">Review</button>
+    </section>
   </body>
 </html>

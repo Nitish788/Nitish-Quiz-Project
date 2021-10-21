@@ -6,6 +6,21 @@ const section = document.getElementById("section-1");
 const optionList = document.querySelector(".options__list");
 const totalScore = document.querySelector(".score");
 
+const start = document.querySelector(".start");
+const quiz = document.querySelector(".main_section");
+const btnStart = document.querySelector(".startquiz");
+
+const btnSubmit = document.getElementById("submit");
+const result = document.querySelector(".report");
+
+const btnReview = document.querySelector(".review");
+
+const labelTimer = document.querySelector(".timer");
+
+const btnQuesNum = document.querySelectorAll(".ques_num");
+
+const message = document.querySelector(".message");
+
 let score = 0;
 
 class Question {
@@ -20,14 +35,18 @@ class Question {
     this.insertHtml();
 
     section.addEventListener("click", this.selectOption.bind(this));
+    btnReview.addEventListener("click", this.review.bind(this));
   }
   insertHtml() {
-    const html = `<h3 class="question question-${this.i}" data-ans1="1">Q ${this.i}. ${this.question}</h3>
+    const html = `<div class = "quiz_question">
+    <h2 class = "ques_order">Question ${this.i}</h2>
+    <h3 class="question question-${this.i}" data-ans1="1"> ${this.question}</h3>
     <div class = 'options__list'>
-    <div class = "option-${this.i} option"><span>1</span><p class = "answer">${this.option1}</p></div>
-    <div class = "option-${this.i} option"><span>2</span><p class = "answer">${this.option2}</p></div>
-    <div class = "option-${this.i} option"><span>3</span><p class = "answer">${this.option3}</p></div>
-    <div class = "option-${this.i} option"><span>4</span><p class = "answer">${this.option4}</p></div>
+    <div class = "option-${this.i} option"><span>1.</span><p class = "answer">${this.option1}</p></div>
+    <div class = "option-${this.i} option"><span>2.</span><p class = "answer">${this.option2}</p></div>
+    <div class = "option-${this.i} option"><span>3.</span><p class = "answer">${this.option3}</p></div>
+    <div class = "option-${this.i} option"><span>4.</span><p class = "answer">${this.option4}</p></div>
+    </div>
     </div>`;
     section.insertAdjacentHTML("beforeend", html);
   }
@@ -38,24 +57,44 @@ class Question {
 
     if (!selectedOption) return;
 
+    // For choose one option
+
     eachOption.forEach((el) => {
       if (el.classList.contains("color")) {
         el.classList.remove("color");
       }
 
+      // Add class to choose option
+
       selectedOption.classList.add("color", "clicked");
+
+      // Highlight attemped question
+
+      btnQuesNum.forEach((btn) => {
+        if (el.classList.contains("color") && this.i == btn.textContent) {
+          btn.style.background =
+            "linear-gradient(to top left, #f85032, #e73827)";
+          btn.style.color = "white";
+        }
+      });
     });
-    console.log(selectedOption.children[1].textContent);
+
+    // Remove class from wrong answer
 
     if (selectedOption.children[1].textContent !== this.answer) {
       if (selectedOption.classList.contains("clicked")) {
         selectedOption.classList.remove("clicked");
       }
     }
+
     this.marks();
+
+    // Update score
 
     totalScore.textContent = score;
   }
+
+  // calculate score
 
   marks() {
     const selectedAnswer = [...document.querySelectorAll(".color")];
@@ -63,9 +102,39 @@ class Question {
       ans.classList.contains("clicked")
     );
 
-    score = correctAnswer.length;
+    score = String(correctAnswer.length).padStart(2, 0);
+    if (score > 6 && score < 10) {
+      message.textContent = "Good 👍";
+    } else if (score == 10) {
+      message.textContent = "Excellent 🎉";
+    } else {
+      message.textContent = "Poor 👎";
+    }
+  }
+  review(e) {
+    // const selectedOptions = document.querySelectorAll(".clicked");
+    // selectedOptions.forEach((el) => {
+    //   console.log(el.children[1].textContent);
+    // });
+    const opt = document.querySelectorAll(`.option-${this.i}`);
+    opt.forEach((el) => {
+      //
+      if (el.children[1].textContent === this.answer) {
+        el.style.border = "2px solid green";
+        el.style.backgroundColor = "white";
+      } else if (
+        el.classList.contains("color") &&
+        el.children[1].textContent !== this.answer
+      ) {
+        el.style.border = "2px solid red";
+        el.style.backgroundColor = "white";
+      }
+    });
   }
 }
+
+// Create Questios
+
 const ques1 = new Question(
   1,
   "Which is the best programming language?",
@@ -156,3 +225,51 @@ const ques10 = new Question(
   "subString()",
   "toUpperCase()"
 );
+
+//  Timeup timer
+
+let time = 20;
+const timeOverTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    labelTimer.textContent = `${min} : ${sec} Left`;
+
+    // Stop timer and submit quiz
+
+    if (time === 0) {
+      clearInterval(timer);
+      submit();
+      labelTimer.classList.add("hidden");
+    }
+    time--;
+  };
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
+
+//  On submit quiz
+
+const submit = function (e) {
+  quiz.classList.add("hidden");
+  result.classList.remove("hidden");
+  time = 0;
+};
+btnSubmit.addEventListener("click", submit);
+
+// On starting the quiz
+
+btnStart.addEventListener("click", function () {
+  start.classList.add("hidden");
+  quiz.classList.remove("hidden");
+  timeOverTimer();
+});
+
+// For reviewing the quiz
+
+const reviewQuiz = function () {
+  quiz.classList.remove("hidden");
+  result.classList.add("hidden");
+};
+btnReview.addEventListener("click", reviewQuiz);

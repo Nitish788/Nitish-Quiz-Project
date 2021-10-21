@@ -1,10 +1,98 @@
-/* .answer {
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+
+.start {
+  height: 45vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ececec;
+}
+.front {
+  width: 54vw;
+  height: 72vh;
+  border: 2px solid grey;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.7rem;
+  box-shadow: inset -3px -3px 9px rgba(152, 153, 156, 0.688),
+    inset 3px 3px 7px rgba(94, 104, 121, 0.688);
+}
+.front:hover {
+  box-shadow: 28px 28px 56px #ababab, -28px -28px 56px #ffffff;
+}
+.general_instruction {
+  align-self: center;
+  line-height: 1rem;
+  padding-top: 1rem;
+}
+ol {
+  line-height: 1.6rem;
   padding: 2rem;
-  border: 2px solid black;
-} */
+  font-family: "Roboto Slab", serif;
+}
+mark {
+  background-color: #ececec;
+  color: red;
+}
+.startquiz {
+  width: 7rem;
+  padding: 1rem;
+  font-family: "Roboto Slab", serif;
+  border-radius: 1.3rem;
+
+  background-color: rgb(0, 110, 255);
+  color: white;
+  box-shadow: inset -3px -3px 9px #ffffff83,
+    inset 3px 3px 7px rgba(94, 104, 121, 0.688);
+}
+.startquiz:active {
+  box-shadow: none;
+}
+
+.main_section {
+  display: flex;
+  justify-content: space-between;
+  /* width: 100vw; */
+}
+.quiz {
+  margin-left: 1rem;
+}
+.quiz_question {
+  width: 60vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(65, 63, 63);
+  border-radius: 0.2rem;
+  font-family: "Roboto Slab", serif;
+}
+.ques_order {
+  border-bottom: 1px solid grey;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  background-color: #ececec;
+  padding-left: 1rem;
+}
+.question {
+  display: flex;
+  padding: 1rem;
+  font-size: 1.4rem;
+}
+
 .option {
-  padding: 2rem;
-  border: 2px solid black;
+  padding: 1.5rem;
+  margin: 1rem;
+  border: 1px solid rgb(70, 68, 68);
+  border-radius: 0.7rem;
+  font-size: 1.3rem;
+  cursor: pointer;
 }
 .color {
   background-color: green;
@@ -13,6 +101,107 @@ p {
   display: inline;
   padding: 2rem;
 }
+button {
+  cursor: pointer;
+  border: none;
+}
+.border {
+  border: 2px solid rgb(184, 180, 180);
+  width: 25vw;
+  height: 21.2vw;
+}
+.scorecard {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.3rem;
+  width: 25vw;
+  height: 25vw;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  right: 4rem;
+  top: 9rem;
+}
+.timer {
+  font-family: "Roboto Slab", serif;
+  font-size: 1.5rem;
+  color: red;
+}
+
+.head {
+  font-size: 1.3rem;
+  text-align: center;
+  padding: 1rem;
+}
+.ques_num {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  margin: 0.3rem;
+  font-size: 1.12rem;
+  background-color: white;
+  border: 1px solid rgb(56, 50, 50);
+}
+#submit {
+  width: 25vw;
+  height: 3rem;
+  font-family: "Roboto Slab", serif;
+  font-size: 1.2rem;
+
+  /* border-radius: 0.2rem; */
+  color: white;
+  background: linear-gradient(to left, #ee0979, #ff6a00);
+}
+
+.result {
+  height: 55vh;
+  /* width: 100vw; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Roboto Slab", serif;
+  font-size: 4rem;
+}
+.card {
+  font-size: 3rem;
+  font-family: "Roboto Slab", serif;
+  display: flex;
+  justify-content: center;
+}
+.total {
+  width: 18rem;
+  height: 18rem;
+  margin: 2rem;
+  border: 2px solid grey;
+  border-radius: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 28px 28px 56px #ababab, -28px -28px 56px #ffffff;
+}
+.message {
+  font-size: 2.5rem;
+  margin: 1rem;
+  font-family: "Roboto Slab", serif;
+  /* text-align: center; */
+}
+.report {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.review {
+  width: 10rem;
+  height: 4rem;
+  font-size: 2.5rem;
+  font-family: "Roboto Slab", serif;
+  border-radius: 0.5rem;
+  background: linear-gradient(to top left, #39b385, #9be15d);
+  box-shadow: 28px 28px 56px #ababab, -28px -28px 56px #ffffff;
+}
+
 .hidden {
-  opacity: 0;
+  display: none;
 }
