@@ -21,6 +21,8 @@ const btnQuesNum = document.querySelectorAll(".ques_num");
 
 const message = document.querySelector(".message");
 
+const btnContainer = document.querySelector(".btn_container");
+console.log(btnContainer);
 let score = 0;
 
 class Question {
@@ -40,7 +42,7 @@ class Question {
   insertHtml() {
     const html = `<div class = "quiz_question">
     <h2 class = "ques_order">Question ${this.i}</h2>
-    <h3 class="question question-${this.i}" data-ans1="1"> ${this.question}</h3>
+    <h3 class="question" id = "question-${this.i}" data-ans1="1"> ${this.question}</h3>
     <div class = 'options__list'>
     <div class = "option-${this.i} option"><span>1.</span><p class = "answer">${this.option1}</p></div>
     <div class = "option-${this.i} option"><span>2.</span><p class = "answer">${this.option2}</p></div>
@@ -112,10 +114,6 @@ class Question {
     }
   }
   review(e) {
-    // const selectedOptions = document.querySelectorAll(".clicked");
-    // selectedOptions.forEach((el) => {
-    //   console.log(el.children[1].textContent);
-    // });
     const opt = document.querySelectorAll(`.option-${this.i}`);
     opt.forEach((el) => {
       //
@@ -129,6 +127,13 @@ class Question {
         el.style.border = "2px solid red";
         el.style.backgroundColor = "white";
       }
+      btnQuesNum.forEach((btn) => {
+        if (el.classList.contains("clicked") && this.i == btn.textContent) {
+          btn.style.background = "green";
+        } else if (btn.style.background !== "green") {
+          btn.style.background = "red";
+        }
+      });
     });
   }
 }
@@ -228,7 +233,7 @@ const ques10 = new Question(
 
 //  Timeup timer
 
-let time = 20;
+let time = 240;
 const timeOverTimer = function () {
   const tick = function () {
     const min = String(Math.trunc(time / 60)).padStart(2, 0);
@@ -273,3 +278,12 @@ const reviewQuiz = function () {
   result.classList.add("hidden");
 };
 btnReview.addEventListener("click", reviewQuiz);
+
+//  Scroll to certain question
+
+btnContainer.addEventListener("click", function (e) {
+  if (e.target.classList.contains("ques_num")) {
+    const id = e.target.getAttribute("scrollTo");
+    document.querySelector(id).scrollIntoView({ behavior: "smooth" });
+  }
+});
