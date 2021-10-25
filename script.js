@@ -1,31 +1,28 @@
 "use strict";
 
-const questions = document.querySelectorAll(".question");
-const answers = document.querySelectorAll(".answer");
 const section = document.getElementById("section-1");
-const optionList = document.querySelector(".options__list");
+const btnSubmit = document.getElementById("submit");
 const totalScore = document.querySelector(".score");
-
 const start = document.querySelector(".start");
 const quiz = document.querySelector(".main_section");
 const btnStart = document.querySelector(".startquiz");
-
-const btnSubmit = document.getElementById("submit");
 const result = document.querySelector(".report");
-
 const btnReview = document.querySelector(".review");
-
 const labelTimer = document.querySelector(".timer");
-
+const message = document.querySelector(".message");
+const btnContainer = document.querySelector(".btn_container");
+const labelStatus = document.querySelector(".status");
 const btnQuesNum = document.querySelectorAll(".ques_num");
 
-const message = document.querySelector(".message");
-
-const btnContainer = document.querySelector(".btn_container");
-console.log(btnContainer);
 let score = 0;
 
+window.addEventListener("beforeunload", function (e) {
+  e.preventDefault();
+  e.returnValue = " ";
+});
+
 class Question {
+  #answer;
   constructor(i, question, option1, option2, option3, option4, answer) {
     this.i = i;
     this.question = question;
@@ -33,13 +30,17 @@ class Question {
     this.option2 = option2;
     this.option3 = option3;
     this.option4 = option4;
-    this.answer = answer;
-    this.insertHtml();
+    this.#answer = answer;
+    this._insertHtml();
 
-    section.addEventListener("click", this.selectOption.bind(this));
-    btnReview.addEventListener("click", this.review.bind(this));
+    section.addEventListener("click", this._selectOption.bind(this));
+
+    section.addEventListener("dblclick", this._unselectOption.bind(this));
+    btnReview.addEventListener("click", this._review.bind(this));
   }
-  insertHtml() {
+
+  // Insert questions
+  _insertHtml() {
     const html = `<div class = "quiz_question">
     <h2 class = "ques_order">Question ${this.i}</h2>
     <h3 class="question" id = "question-${this.i}" data-ans1="1"> ${this.question}</h3>
@@ -50,28 +51,26 @@ class Question {
     <div class = "option-${this.i} option"><span>4.</span><p class = "answer">${this.option4}</p></div>
     </div>
     </div>`;
+
+    // Add questions
     section.insertAdjacentHTML("beforeend", html);
   }
-  selectOption(e) {
+  _selectOption(e) {
     const selectedOption = e.target.closest(`.option-${this.i}`);
 
     const eachOption = document.querySelectorAll(`.option-${this.i}`);
 
     if (!selectedOption) return;
 
-    // For choose one option
-
-    eachOption.forEach((el) => {
+    eachOption.forEach((el, i) => {
       if (el.classList.contains("color")) {
         el.classList.remove("color");
       }
 
       // Add class to choose option
-
       selectedOption.classList.add("color", "clicked");
 
       // Highlight attemped question
-
       btnQuesNum.forEach((btn) => {
         if (el.classList.contains("color") && this.i == btn.textContent) {
           btn.style.background =
@@ -81,52 +80,77 @@ class Question {
       });
     });
 
-    // Remove class from wrong answer
+    if (selectedOption.classList.contains("color")) {
+    }
 
-    if (selectedOption.children[1].textContent !== this.answer) {
+    // Remove class from wrong answer
+    if (selectedOption.children[1].textContent !== this.#answer) {
       if (selectedOption.classList.contains("clicked")) {
         selectedOption.classList.remove("clicked");
       }
     }
 
-    this.marks();
+    // To get answer of user and update score
+    this._marks();
 
     // Update score
-
     totalScore.textContent = score;
   }
 
+  _unselectOption(e) {
+    const selectedOption = e.target.closest(`.option-${this.i}`);
+    const eachOption = document.querySelectorAll(`.option-${this.i}`);
+
+    if (!selectedOption) return;
+    eachOption.forEach((el) => {
+      btnQuesNum.forEach((btn) => {
+        if (el.classList.contains("color") && this.i == btn.textContent) {
+          btn.style.background = "";
+          btn.style.color = "";
+        }
+      });
+      if (el.classList.contains("color")) {
+        el.classList.remove("color");
+      }
+    });
+    this._marks();
+  }
   // calculate score
 
-  marks() {
+  _marks() {
+    // To calculate Score
     const selectedAnswer = [...document.querySelectorAll(".color")];
     const correctAnswer = selectedAnswer.filter((ans) =>
       ans.classList.contains("clicked")
     );
-
     score = String(correctAnswer.length).padStart(2, 0);
-    if (score > 6 && score < 10) {
+    if (score > 5 && score < 10) {
       message.textContent = "Good 👍";
     } else if (score == 10) {
       message.textContent = "Excellent 🎉";
     } else {
       message.textContent = "Poor 👎";
     }
+
+    // TO calculate unanswered question
+    labelStatus.textContent = `Unattempted(${10 - selectedAnswer.length})`;
   }
-  review(e) {
+  _review(e) {
     const opt = document.querySelectorAll(`.option-${this.i}`);
     opt.forEach((el) => {
-      //
-      if (el.children[1].textContent === this.answer) {
+      // Mark correct and incorrect answer with correct answer
+      if (el.children[1].textContent === this.#answer) {
         el.style.border = "2px solid green";
         el.style.backgroundColor = "white";
       } else if (
         el.classList.contains("color") &&
-        el.children[1].textContent !== this.answer
+        el.children[1].textContent !== this.#answer
       ) {
         el.style.border = "2px solid red";
         el.style.backgroundColor = "white";
       }
+
+      // Mark btn to see correct and incorrect answer
       btnQuesNum.forEach((btn) => {
         if (el.classList.contains("clicked") && this.i == btn.textContent) {
           btn.style.background = "green";
@@ -135,6 +159,7 @@ class Question {
         }
       });
     });
+    // window.location.reload();
   }
 }
 
@@ -232,8 +257,7 @@ const ques10 = new Question(
 );
 
 //  Timeup timer
-
-let time = 240;
+let time = 120;
 const timeOverTimer = function () {
   const tick = function () {
     const min = String(Math.trunc(time / 60)).padStart(2, 0);
@@ -254,17 +278,16 @@ const timeOverTimer = function () {
   return timer;
 };
 
-//  On submit quiz
-
+//   On submit quiz
 const submit = function (e) {
   quiz.classList.add("hidden");
   result.classList.remove("hidden");
+  // Stop timer
   time = 0;
 };
 btnSubmit.addEventListener("click", submit);
 
 // On starting the quiz
-
 btnStart.addEventListener("click", function () {
   start.classList.add("hidden");
   quiz.classList.remove("hidden");
@@ -272,7 +295,6 @@ btnStart.addEventListener("click", function () {
 });
 
 // For reviewing the quiz
-
 const reviewQuiz = function () {
   quiz.classList.remove("hidden");
   result.classList.add("hidden");
@@ -280,7 +302,6 @@ const reviewQuiz = function () {
 btnReview.addEventListener("click", reviewQuiz);
 
 //  Scroll to certain question
-
 btnContainer.addEventListener("click", function (e) {
   if (e.target.classList.contains("ques_num")) {
     const id = e.target.getAttribute("scrollTo");
