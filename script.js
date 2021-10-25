@@ -34,7 +34,6 @@ class Question {
     this._insertHtml();
 
     section.addEventListener("click", this._selectOption.bind(this));
-
     section.addEventListener("dblclick", this._unselectOption.bind(this));
     btnReview.addEventListener("click", this._review.bind(this));
   }
@@ -55,20 +54,22 @@ class Question {
     // Add questions
     section.insertAdjacentHTML("beforeend", html);
   }
+  // On select any option
   _selectOption(e) {
     const selectedOption = e.target.closest(`.option-${this.i}`);
-
     const eachOption = document.querySelectorAll(`.option-${this.i}`);
 
+    // Guard clause to only response for right place
     if (!selectedOption) return;
 
     eachOption.forEach((el, i) => {
       if (el.classList.contains("color")) {
         el.classList.remove("color");
+        el.classList.remove("clicked");
       }
 
       // Add class to choose option
-      selectedOption.classList.add("color", "clicked");
+      selectedOption.classList.add("color");
 
       // Highlight attemped question
       btnQuesNum.forEach((btn) => {
@@ -80,14 +81,15 @@ class Question {
       });
     });
 
-    if (selectedOption.classList.contains("color")) {
-    }
-
     // Remove class from wrong answer
-    if (selectedOption.children[1].textContent !== this.#answer) {
-      if (selectedOption.classList.contains("clicked")) {
-        selectedOption.classList.remove("clicked");
-      }
+    // if (selectedOption.children[1].textContent !== this.#answer) {
+    //   if (selectedOption.classList.contains("clicked")) {
+    //     selectedOption.classList.remove("clicked");
+    //   }
+    // }
+    // Add class to correct option on choose that option
+    if (selectedOption.children[1].textContent === this.#answer) {
+      selectedOption.classList.add("clicked");
     }
 
     // To get answer of user and update score
@@ -97,26 +99,37 @@ class Question {
     totalScore.textContent = score;
   }
 
+  // On unselectimg option
   _unselectOption(e) {
     const selectedOption = e.target.closest(`.option-${this.i}`);
     const eachOption = document.querySelectorAll(`.option-${this.i}`);
 
+    // Guard clause to only response for right place
     if (!selectedOption) return;
+
     eachOption.forEach((el) => {
       btnQuesNum.forEach((btn) => {
+        // Make buttons neutral
         if (el.classList.contains("color") && this.i == btn.textContent) {
           btn.style.background = "";
           btn.style.color = "";
         }
       });
+      // Unselect option
       if (el.classList.contains("color")) {
         el.classList.remove("color");
       }
+      // Unselect option
+      if (el.classList.contains("clicked")) {
+        el.classList.remove("clicked");
+      }
     });
+
+    // To update marks acordingly
     this._marks();
   }
-  // calculate score
 
+  // calculate score
   _marks() {
     // To calculate Score
     const selectedAnswer = [...document.querySelectorAll(".color")];
@@ -137,8 +150,9 @@ class Question {
   }
   _review(e) {
     const opt = document.querySelectorAll(`.option-${this.i}`);
+
     opt.forEach((el) => {
-      // Mark correct and incorrect answer with correct answer
+      // Mark correct option and attempt answer
       if (el.children[1].textContent === this.#answer) {
         el.style.border = "2px solid green";
         el.style.backgroundColor = "white";
@@ -159,7 +173,8 @@ class Question {
         }
       });
     });
-    // window.location.reload();
+    // Clear status
+    labelStatus.textContent = "";
   }
 }
 
