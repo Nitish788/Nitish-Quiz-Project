@@ -201,6 +201,12 @@ button {
   background: linear-gradient(to top left, #39b385, #9be15d);
   box-shadow: 28px 28px 56px #ababab, -28px -28px 56px #ffffff;
 }
+.status {
+  position: relative;
+  top: 0.7rem;
+  left: 1rem;
+  font-family: "Roboto Slab", serif;
+}
 
 .hidden {
   display: none;
